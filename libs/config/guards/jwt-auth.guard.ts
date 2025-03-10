@@ -31,7 +31,6 @@ export class JwtAuthGuard implements CanActivate {
         throw new UnauthorizedException('Invalid token');
       }
 
-      // Decode the token to get the user ID
       const decodedToken = this.decodeToken(token);
       request.user = decodedToken;
 
@@ -46,8 +45,12 @@ export class JwtAuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 
+  /*
+    this is a simple implementation. In a real app, you would use a JWT library
+    like @nestjs/jwt
+   */
+
   private decodeToken(token: string): any {
-    // This is a simple implementation. In a real app, you would use a JWT library
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
