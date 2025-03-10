@@ -41,9 +41,4 @@ export class UserController {
   async getMe(@Payload() token: string) {
     return await this.userService.getMe(token);
   }
-
-  @MessagePattern('update-user-avatar')
-  async updateAvatar(@Payload() payload: { token: string; avatar: any }) {
-    return await this.userService.updateAvatar(payload.token, payload.avatar);
-  }
 }

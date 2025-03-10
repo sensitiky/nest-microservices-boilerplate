@@ -20,13 +20,36 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('NestJS Microservices API')
     .setDescription(
-      'A modular and scalable API with microservices using hexagonal architecture',
+      'A modular and scalable API with microservices using hexagonal architecture. This API provides endpoints for authentication, user management, and product management.',
     )
     .setVersion('1.0')
-    .addBearerAuth()
+    .addTag(
+      'Authentication',
+      'Endpoints for user authentication and session management',
+    )
+    .addTag('Users', 'Endpoints for user management')
+    .addTag('Products', 'Endpoints for product management')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+      docExpansion: 'list',
+    },
+  });
 
   app.enableCors({
     origin: ['*'],
@@ -42,6 +65,9 @@ async function bootstrap() {
   const port = configService.get<string>('PORT') || 3000;
   await app.listen(port, '0.0.0.0');
   logger.log(`Gateway running on port ${port}`);
+  logger.log(
+    `Swagger documentation available at http://localhost:${port}/api/docs`,
+  );
 }
 
 bootstrap();

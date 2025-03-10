@@ -2,6 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { IGatewayService } from '../../domain/services/gateway.service.interface';
 import { firstValueFrom } from 'rxjs';
+import {
+  LoginDto,
+  RegisterDto,
+  AuthResponseDto,
+} from '../../domain/dtos/auth.dto';
+import { UserDto, UpdateUserDto } from '../../domain/dtos/user.dto';
+import {
+  ProductDto,
+  CreateProductDto,
+  UpdateProductDto,
+} from '../../domain/dtos/product.dto';
 
 @Injectable()
 export class GatewayService implements IGatewayService {
@@ -12,19 +23,15 @@ export class GatewayService implements IGatewayService {
   ) {}
 
   // Auth methods
-  async login(credentials: { email: string; password: string }): Promise<any> {
+  async login(credentials: LoginDto): Promise<AuthResponseDto> {
     return await firstValueFrom(this.authClient.send('login', credentials));
   }
 
-  async register(userData: {
-    email: string;
-    password: string;
-    name: string;
-  }): Promise<any> {
+  async register(userData: RegisterDto): Promise<AuthResponseDto> {
     return await firstValueFrom(this.authClient.send('register', userData));
   }
 
-  async refreshToken(refreshToken: string): Promise<any> {
+  async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
     return await firstValueFrom(
       this.authClient.send('refresh-token', refreshToken),
     );
@@ -35,19 +42,19 @@ export class GatewayService implements IGatewayService {
   }
 
   // User methods
-  async getAllUsers(): Promise<any[]> {
+  async getAllUsers(): Promise<UserDto[]> {
     return await firstValueFrom(this.userClient.send('get-all-users', {}));
   }
 
-  async getUserById(id: string): Promise<any> {
+  async getUserById(id: string): Promise<UserDto> {
     return await firstValueFrom(this.userClient.send('get-user-by-id', id));
   }
 
-  async getMe(token: string): Promise<any> {
+  async getMe(token: string): Promise<UserDto> {
     return await firstValueFrom(this.userClient.send('me', token));
   }
 
-  async updateUser(id: string, user: any): Promise<any> {
+  async updateUser(id: string, user: UpdateUserDto): Promise<UserDto> {
     return await firstValueFrom(
       this.userClient.send('update-user', { id, user }),
     );
@@ -58,25 +65,28 @@ export class GatewayService implements IGatewayService {
   }
 
   // Product methods
-  async getAllProducts(): Promise<any[]> {
+  async getAllProducts(): Promise<ProductDto[]> {
     return await firstValueFrom(
       this.productClient.send('get-all-products', {}),
     );
   }
 
-  async getProductById(id: string): Promise<any> {
+  async getProductById(id: string): Promise<ProductDto> {
     return await firstValueFrom(
       this.productClient.send('get-product-by-id', id),
     );
   }
 
-  async createProduct(product: any): Promise<any> {
+  async createProduct(product: CreateProductDto): Promise<ProductDto> {
     return await firstValueFrom(
       this.productClient.send('create-product', product),
     );
   }
 
-  async updateProduct(id: string, product: any): Promise<any> {
+  async updateProduct(
+    id: string,
+    product: UpdateProductDto,
+  ): Promise<ProductDto> {
     return await firstValueFrom(
       this.productClient.send('update-product', { id, product }),
     );
