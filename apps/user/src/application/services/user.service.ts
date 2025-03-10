@@ -66,23 +66,6 @@ export class UserService implements IUserService {
     }
   }
 
-  async updateAvatar(token: string, avatar: any): Promise<User> {
-    try {
-      const decodedToken = await this.decodeToken(token);
-      const user = await this.userRepository.findById(decodedToken.userId);
-      if (!user) throw new NotFoundException('User not found');
-
-      // Here you would handle the avatar upload to a storage service
-      // and update the user's avatar URL
-      const avatarUrl = `https://example.com/avatars/${user.id}`;
-
-      return await this.userRepository.update(user.id, { avatar: avatarUrl });
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
-  }
-
   private async decodeToken(token: string): Promise<any> {
     const decodedToken = await this.jwtService.decode(
       token.replace('Bearer ', ''),

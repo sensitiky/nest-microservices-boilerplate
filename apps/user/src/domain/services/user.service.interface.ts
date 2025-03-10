@@ -8,5 +8,4 @@ export interface IUserService {
   updateUser(id: string, user: Partial<User>): Promise<User>;
   deleteUser(id: string): Promise<void>;
   getMe(token: string): Promise<Partial<User>>;
-  updateAvatar(token: string, avatar: any): Promise<User>;
 }
