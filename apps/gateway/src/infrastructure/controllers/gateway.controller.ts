@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GatewayService } from '../../application/services/gateway.service';
-import { JwtAuthGuard } from '@api/config';
+import { AuthGuard } from '@api/config';
 
 @Controller()
 export class GatewayController {
@@ -35,38 +35,38 @@ export class GatewayController {
   }
 
   @Post('auth/logout')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async logout(@Req() req) {
     return await this.gatewayService.logout(req.user.userId);
   }
 
   // User endpoints
   @Get('users')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async getAllUsers() {
     return await this.gatewayService.getAllUsers();
   }
 
   @Get('users/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async getUserById(@Param('id') id: string) {
     return await this.gatewayService.getUserById(id);
   }
 
   @Get('users/me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async getMe(@Req() req) {
     return await this.gatewayService.getMe(req.headers.authorization);
   }
 
   @Put('users/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async updateUser(@Param('id') id: string, @Body() user: any) {
     return await this.gatewayService.updateUser(id, user);
   }
 
   @Delete('users/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async deleteUser(@Param('id') id: string) {
     return await this.gatewayService.deleteUser(id);
   }
@@ -83,19 +83,19 @@ export class GatewayController {
   }
 
   @Post('products')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async createProduct(@Body() product: any) {
     return await this.gatewayService.createProduct(product);
   }
 
   @Put('products/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async updateProduct(@Param('id') id: string, @Body() product: any) {
     return await this.gatewayService.updateProduct(id, product);
   }
 
   @Delete('products/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async deleteProduct(@Param('id') id: string) {
     return await this.gatewayService.deleteProduct(id);
   }

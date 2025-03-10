@@ -45,12 +45,12 @@ export class UserService implements IUserService {
   }
 
   async updateUser(id: string, user: Partial<User>): Promise<User> {
-    await this.getUserById(id); // Verify user exists
+    await this.getUserById(id);
     return await this.userRepository.update(id, user);
   }
 
   async deleteUser(id: string): Promise<void> {
-    await this.getUserById(id); // Verify user exists
+    await this.getUserById(id);
     await this.userRepository.delete(id);
   }
 

@@ -27,12 +27,12 @@ export class ProductService implements IProductService {
   }
 
   async updateProduct(id: string, product: Partial<Product>): Promise<Product> {
-    await this.getProductById(id); // Verify product exists
+    await this.getProductById(id);
     return await this.productRepository.update(id, product);
   }
 
   async deleteProduct(id: string): Promise<void> {
-    await this.getProductById(id); // Verify product exists
+    await this.getProductById(id);
     await this.productRepository.delete(id);
   }
 }
