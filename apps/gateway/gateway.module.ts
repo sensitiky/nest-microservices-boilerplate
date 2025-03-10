@@ -3,10 +3,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { GatewayController } from './src/infrastructure/controllers/gateway.controller';
 import { GatewayService } from './src/application/services/gateway.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '360m' },
+      }),
+    }),
     ClientsModule.registerAsync([
       {
         name: 'AUTH_SERVICE',
