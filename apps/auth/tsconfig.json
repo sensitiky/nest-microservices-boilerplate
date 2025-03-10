@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/apps/auth",
+    "baseUrl": "./"
+  },
+  "include": ["../../libs/common/**/*", "../../libs/config/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}

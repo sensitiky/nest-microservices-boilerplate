@@ -1,0 +1,10 @@
+{
+  "name": "@api/common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "class-validator": "^0.14.1",
+    "typeorm": "^0.3.21"
+  }
+}

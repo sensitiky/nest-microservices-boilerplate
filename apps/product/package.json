@@ -1,0 +1,14 @@
+{
+  "name": "@api/product",
+  "version": "1.0.0",
+  "description": "Product microservice",
+  "main": "main.js",
+  "scripts": {
+    "start": "bun run ../../dist/apps/product/main.js",
+    "start:dev": "bun run --watch ../../dist/apps/product/main.js"
+  },
+  "dependencies": {
+    "@api/common": "workspace:*",
+    "@api/config": "workspace:*"
+  }
+}
