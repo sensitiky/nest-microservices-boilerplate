@@ -61,7 +61,7 @@ export class AuthService implements IAuthService {
     try {
       const decoded = this.jwtService.verify(token);
       return !!decoded;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -76,7 +76,7 @@ export class AuthService implements IAuthService {
       }
 
       return this.generateTokens(decoded.userId);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }

@@ -24,11 +24,7 @@ import {
   RefreshTokenDto,
   AuthResponseDto,
 } from '../../domain/dtos/auth.dto';
-import {
-  UserDto,
-  CreateUserDto,
-  UpdateUserDto,
-} from '../../domain/dtos/user.dto';
+import { UserDto, UpdateUserDto } from '../../domain/dtos/user.dto';
 import {
   ProductDto,
   CreateProductDto,
