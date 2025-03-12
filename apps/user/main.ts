@@ -11,14 +11,14 @@ async function bootstrap() {
       transport: Transport.TCP,
       options: {
         host: '0.0.0.0',
-        port: process.env.TCP_PORT ? parseInt(process.env.TCP_PORT) : 4002,
+        port: process.env.TCP_PORT ? parseInt(process.env.TCP_PORT) : 4003,
       },
     },
   );
 
   await app.listen();
   logger.log(
-    `User microservice is running on port ${process.env.TCP_PORT || 4002}`,
+    `User microservice is running on port ${process.env.TCP_PORT || 4003}`,
   );
 }
 

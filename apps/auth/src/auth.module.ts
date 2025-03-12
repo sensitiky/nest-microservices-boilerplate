@@ -8,6 +8,7 @@ import { AuthEntity } from './infrastructure/entities/auth.entity';
 import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { DatabaseModule } from '@api/config';
 import { UserRepository } from 'apps/user/src/infrastructure/repositories/user.repository';
+import { UserEntity } from 'apps/user/src/infrastructure/entities/user.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { UserRepository } from 'apps/user/src/infrastructure/repositories/user.r
       }),
     }),
     DatabaseModule,
-    TypeOrmModule.forFeature([AuthEntity], 'postgresConnection'),
+    TypeOrmModule.forFeature([AuthEntity, UserEntity], 'postgresConnection'),
   ],
   controllers: [AuthController],
   providers: [
