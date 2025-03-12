@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
 import { ProductModule } from './product.module';
 import { ConsoleLogger } from '@nestjs/common';
 

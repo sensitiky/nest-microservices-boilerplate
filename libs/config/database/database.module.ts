@@ -13,7 +13,11 @@ const postgresEntities = [User, Product, Auth];
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.get<string>('DATABASE_URL'),
+        host: configService.get<string>('DB_HOST'),
+        username: configService.get<string>('DB_USERNAME'),
+        database: configService.get<string>('DB_NAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        port: configService.get<number>('DB_PORT'),
         entities: postgresEntities,
         synchronize: true,
         logging: false,
