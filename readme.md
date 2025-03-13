@@ -139,5 +139,4 @@ nest-microservices/
    - Implement services in the application layer
    - Create controllers, repository implementations, and ORM entities in the infrastructure layer
 3. Add the microservice to `nest-cli.json`
-4. Add the microservice to the workspaces in `package.json`
-5. Add the microservice to `docker-compose.yml`
+4. Add the microservice to `docker-compose.yml`
