@@ -37,7 +37,7 @@ This project follows a microservices architecture with a hexagonal design patter
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) >= 1.0.0
+- [Bun](https://bun.sh/) >= 1.2.5
 - [Node.js](https://nodejs.org/) >= 20.0.0
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for containerization)
 
