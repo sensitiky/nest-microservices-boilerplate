@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Auth } from '../../domain/entities/auth.entity';
 import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
 import { AuthEntity } from '../entities/auth.entity';
+import { Auth } from '@api/common';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
   constructor(
-    @InjectRepository(AuthEntity, 'postgresConnection')
+    @InjectRepository(Auth, 'postgresConnection')
     private readonly authRepository: Repository<AuthEntity>,
   ) {}
 
@@ -16,20 +16,20 @@ export class AuthRepository implements IAuthRepository {
     const authEntity = await this.authRepository.findOne({
       where: { id },
     });
-    return authEntity ? this.mapToDomain(authEntity) : null;
+    return authEntity ? authEntity : null;
   }
 
   async findByUserId(userId: string): Promise<Auth> {
     const authEntity = await this.authRepository.findOne({
       where: { userId },
     });
-    return authEntity ? this.mapToDomain(authEntity) : null;
+    return authEntity ? authEntity : null;
   }
 
   async create(auth: Auth): Promise<Auth> {
     const authEntity = this.mapToEntity(auth);
-    const savedEntity = await this.authRepository.save(authEntity);
-    return this.mapToDomain(savedEntity);
+    await this.authRepository.save(authEntity);
+    return authEntity;
   }
 
   async update(id: string, auth: Partial<Auth>): Promise<Auth> {
@@ -39,18 +39,6 @@ export class AuthRepository implements IAuthRepository {
 
   async delete(id: string): Promise<void> {
     await this.authRepository.delete(id);
-  }
-
-  private mapToDomain(entity: AuthEntity): Auth {
-    return new Auth({
-      id: entity.id,
-      userId: entity.userId,
-      accessToken: entity.accessToken,
-      refreshToken: entity.refreshToken,
-      expiresAt: entity.expiresAt,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-    });
   }
 
   private mapToEntity(domain: Auth): AuthEntity {

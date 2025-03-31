@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../../domain/entities/user.entity';
+import { UserDomain } from '../../domain/entities/user.entity';
 import { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import { IUserService } from '../../domain/services/user.service.interface';
 
@@ -20,11 +20,11 @@ export class UserService implements IUserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<UserDomain[]> {
     return await this.userRepository.findAll();
   }
 
-  async getUserById(id: string): Promise<User> {
+  async getUserById(id: string): Promise<UserDomain> {
     const user = await this.userRepository.findById(id);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -32,7 +32,7 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<UserDomain> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
@@ -40,11 +40,11 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async createUser(user: User): Promise<User> {
+  async createUser(user: UserDomain): Promise<UserDomain> {
     return await this.userRepository.create(user);
   }
 
-  async updateUser(id: string, user: Partial<User>): Promise<User> {
+  async updateUser(id: string, user: Partial<UserDomain>): Promise<UserDomain> {
     await this.getUserById(id);
     return await this.userRepository.update(id, user);
   }
@@ -54,7 +54,7 @@ export class UserService implements IUserService {
     await this.userRepository.delete(id);
   }
 
-  async getMe(token: string): Promise<Partial<User>> {
+  async getMe(token: string): Promise<Partial<UserDomain>> {
     try {
       const decodedToken = await this.decodeToken(token);
       const user = await this.userRepository.findById(decodedToken.userId);
@@ -74,7 +74,7 @@ export class UserService implements IUserService {
     return decodedToken;
   }
 
-  private sanitizeUser(user: User): Partial<User> {
+  private sanitizeUser(user: UserDomain): Partial<UserDomain> {
     const { password, ...sanitizedUser } = user;
     return sanitizedUser;
   }
