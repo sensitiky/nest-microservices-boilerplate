@@ -4,21 +4,24 @@ import { Auth } from '../../domain/entities/auth.entity';
 import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
 import { IAuthService } from '../../domain/services/auth.service.interface';
 import * as bcrypt from 'bcryptjs';
-import { IUserRepository } from 'apps/user/src/domain/repositories/user.repository.interface';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
     @Inject('IAuthRepository')
     private readonly authRepository: IAuthRepository,
-    @Inject('IUserRepository')
-    private readonly userRepository: IUserRepository,
+    @Inject('USER_SERVICE')
+    private readonly userRepository: ClientProxy,
     private readonly jwtService: JwtService,
   ) {}
 
   async login(credentials: { email: string; password: string }): Promise<Auth> {
-    const user = await this.userRepository.findByEmail(credentials.email);
+    const user = await firstValueFrom(
+      this.userRepository.send('get-user-by-email', credentials.email),
+    );
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -39,22 +42,34 @@ export class AuthService implements IAuthService {
     password: string;
     name: string;
   }): Promise<Auth> {
-    const existingUser = await this.userRepository.findByEmail(userData.email);
-    if (existingUser) {
-      throw new Error('User already exists');
+    try {
+      const existingUser = await firstValueFrom(
+        this.userRepository
+          .send('get-user-by-email', userData.email)
+          .pipe(catchError(() => of(null))),
+      );
+      if (existingUser) {
+        throw new Error('User already exists');
+      }
+
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const user = await firstValueFrom(
+        this.userRepository
+          .send('create-user', {
+            id: uuidv4(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            email: userData.email,
+            password: hashedPassword,
+            name: userData.name,
+          })
+          .pipe(catchError(() => of(null))),
+      );
+
+      return this.generateTokens(user.id);
+    } catch (e) {
+      console.error(e);
     }
-
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const user = await this.userRepository.create({
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      email: userData.email,
-      password: hashedPassword,
-      name: userData.name,
-    });
-
-    return this.generateTokens(user.id);
   }
 
   async validateToken(token: string): Promise<boolean> {

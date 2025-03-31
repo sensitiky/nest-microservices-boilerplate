@@ -4,11 +4,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './application/services/auth.service';
 import { AuthController } from './infrastructure/controllers/auth.controller';
-import { AuthEntity } from './infrastructure/entities/auth.entity';
 import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { DatabaseModule } from '@api/config';
-import { UserRepository } from 'apps/user/src/infrastructure/repositories/user.repository';
-import { UserEntity } from 'apps/user/src/infrastructure/entities/user.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { Auth, User } from '@api/common';
 
 @Module({
   imports: [
@@ -21,8 +20,21 @@ import { UserEntity } from 'apps/user/src/infrastructure/entities/user.entity';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+    ClientsModule.registerAsync([
+      {
+        name: 'USER_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: '0.0.0.0',
+            port: configService.get<number>('USER_TCP_PORT') || 4003,
+          },
+        }),
+      },
+    ]),
     DatabaseModule,
-    TypeOrmModule.forFeature([AuthEntity, UserEntity], 'postgresConnection'),
   ],
   controllers: [AuthController],
   providers: [
@@ -31,10 +43,7 @@ import { UserEntity } from 'apps/user/src/infrastructure/entities/user.entity';
       provide: 'IAuthRepository',
       useClass: AuthRepository,
     },
-    {
-      provide: 'IUserRepository',
-      useClass: UserRepository,
-    },
+    { provide: 'IAuthService', useClass: AuthService },
   ],
 })
 export class AuthModule {}

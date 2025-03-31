@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserService } from '../../application/services/user.service';
-import { User } from '../../domain/entities/user.entity';
+import { UserDomain } from '../../domain/entities/user.entity';
 
 @Controller()
 export class UserController {
@@ -23,12 +23,14 @@ export class UserController {
   }
 
   @MessagePattern('create-user')
-  async createUser(@Payload() user: User) {
+  async createUser(@Payload() user: UserDomain) {
     return await this.userService.createUser(user);
   }
 
   @MessagePattern('update-user')
-  async updateUser(@Payload() payload: { id: string; user: Partial<User> }) {
+  async updateUser(
+    @Payload() payload: { id: string; user: Partial<UserDomain> },
+  ) {
     return await this.userService.updateUser(payload.id, payload.user);
   }
 

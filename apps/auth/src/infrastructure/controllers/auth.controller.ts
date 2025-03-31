@@ -1,10 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { AuthService } from '../../application/services/auth.service';
+import { IAuthService } from '../../domain/services/auth.service.interface';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject('IAuthService')
+    private readonly authService: IAuthService,
+  ) {}
 
   @MessagePattern('login')
   async login(@Payload() credentials: { email: string; password: string }) {
