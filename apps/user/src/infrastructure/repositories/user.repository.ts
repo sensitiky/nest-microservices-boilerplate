@@ -1,43 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../domain/entities/user.entity';
+import { UserDomain } from '../../domain/entities/user.entity';
 import { IUserRepository } from '../../domain/repositories/user.repository.interface';
-import { UserEntity } from '../entities/user.entity';
+import { User } from '@api/common';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(
-    @InjectRepository(UserEntity, 'postgresConnection')
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(User, 'postgresConnection')
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserDomain[]> {
     const userEntities = await this.userRepository.find();
     return userEntities.map(this.mapToDomain);
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserDomain> {
     const userEntity = await this.userRepository.findOne({
       where: { id },
     });
     return userEntity ? this.mapToDomain(userEntity) : null;
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<UserDomain> {
     const userEntity = await this.userRepository.findOne({
       where: { email },
     });
     return userEntity ? this.mapToDomain(userEntity) : null;
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: UserDomain): Promise<UserDomain> {
     const userEntity = this.mapToEntity(user);
     const savedEntity = await this.userRepository.save(userEntity);
     return this.mapToDomain(savedEntity);
   }
 
-  async update(id: string, user: Partial<User>): Promise<User> {
+  async update(id: string, user: Partial<UserDomain>): Promise<UserDomain> {
     await this.userRepository.update(id, user);
     return this.findById(id);
   }
@@ -46,8 +46,8 @@ export class UserRepository implements IUserRepository {
     await this.userRepository.delete(id);
   }
 
-  private mapToDomain(entity: UserEntity): User {
-    return new User({
+  private mapToDomain(entity: User): UserDomain {
+    return new UserDomain({
       id: entity.id,
       name: entity.name,
       email: entity.email,
@@ -58,8 +58,8 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  private mapToEntity(domain: User): UserEntity {
-    const entity = new UserEntity();
+  private mapToEntity(domain: UserDomain): User {
+    const entity = new User();
     entity.id = domain.id;
     entity.name = domain.name;
     entity.email = domain.email;

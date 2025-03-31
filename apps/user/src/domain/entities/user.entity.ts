@@ -1,4 +1,4 @@
-export class User {
+export class UserDomain {
   id: string;
   name: string;
   email: string;

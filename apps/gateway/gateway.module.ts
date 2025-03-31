@@ -30,18 +30,6 @@ import { JwtModule } from '@nestjs/jwt';
         }),
       },
       {
-        name: 'USER_SERVICE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
-          options: {
-            host: '0.0.0.0',
-            port: configService.get('USER_TCP_PORT') || 4002,
-          },
-        }),
-      },
-      {
         name: 'PRODUCT_SERVICE',
         imports: [ConfigModule],
         inject: [ConfigService],
@@ -49,7 +37,19 @@ import { JwtModule } from '@nestjs/jwt';
           transport: Transport.TCP,
           options: {
             host: '0.0.0.0',
-            port: configService.get('PRODUCT_TCP_PORT') || 4003,
+            port: configService.get('PRODUCT_TCP_PORT') || 4002,
+          },
+        }),
+      },
+      {
+        name: 'USER_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: '0.0.0.0',
+            port: configService.get('USER_TCP_PORT') || 4003,
           },
         }),
       },
