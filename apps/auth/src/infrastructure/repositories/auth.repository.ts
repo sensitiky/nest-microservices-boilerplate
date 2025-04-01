@@ -2,14 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
-import { AuthEntity } from '../entities/auth.entity';
 import { Auth } from '@api/common';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
   constructor(
     @InjectRepository(Auth, 'postgresConnection')
-    private readonly authRepository: Repository<AuthEntity>,
+    private readonly authRepository: Repository<Auth>,
   ) {}
 
   async findById(id: string): Promise<Auth> {
@@ -27,8 +26,7 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async create(auth: Auth): Promise<Auth> {
-    const authEntity = this.mapToEntity(auth);
-    await this.authRepository.save(authEntity);
+    const authEntity = await this.authRepository.save(auth);
     return authEntity;
   }
 
@@ -39,17 +37,5 @@ export class AuthRepository implements IAuthRepository {
 
   async delete(id: string): Promise<void> {
     await this.authRepository.delete(id);
-  }
-
-  private mapToEntity(domain: Auth): AuthEntity {
-    const entity = new AuthEntity();
-    entity.id = domain.id;
-    entity.userId = domain.userId;
-    entity.accessToken = domain.accessToken;
-    entity.refreshToken = domain.refreshToken;
-    entity.expiresAt = domain.expiresAt;
-    entity.createdAt = domain.createdAt;
-    entity.updatedAt = domain.updatedAt;
-    return entity;
   }
 }
