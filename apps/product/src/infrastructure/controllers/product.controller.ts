@@ -1,11 +1,14 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { ProductService } from '../../application/services/product.service';
 import { Product } from '../../domain/entities/product.entity';
+import { IProductService } from '../../domain/services/product.service.interface';
 
 @Controller()
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    @Inject('IProductService')
+    private readonly productService: IProductService,
+  ) {}
 
   @MessagePattern('get-all-products')
   async getAllProducts() {

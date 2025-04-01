@@ -108,7 +108,6 @@ nest-microservices/
 │       │   │   └── services/  # Service Implementations
 │       │   ├── infrastructure/ # Infrastructure Layer
 │       │   │   ├── controllers/ # Controllers
-│       │   │   ├── entities/  # ORM Entities
 │       │   │   └── repositories/ # Repository Implementations
 │       │   └── product.module.ts # Module Definition
 │       ├── main.ts            # Microservice Entry Point
@@ -137,6 +136,6 @@ nest-microservices/
    - Create domain, application, and infrastructure layers
    - Define entities, repositories, and services in the domain layer
    - Implement services in the application layer
-   - Create controllers, repository implementations, and ORM entities in the infrastructure layer
+   - Create controllers and repository implementations in the infrastructure layer
 3. Add the microservice to `nest-cli.json`
 4. Add the microservice to `docker-compose.yml`

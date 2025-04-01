@@ -30,6 +30,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from '../../domain/dtos/product.dto';
+import { FastifyRequest } from 'fastify';
 
 @Controller()
 export class GatewayController {
@@ -134,7 +135,7 @@ export class GatewayController {
   @ApiBearerAuth()
   @Get('users/me')
   @UseGuards(AuthGuard)
-  async getMe(@Req() req) {
+  async getMe(@Req() req: FastifyRequest) {
     return await this.gatewayService.getMe(req.headers.authorization);
   }
 

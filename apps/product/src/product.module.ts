@@ -20,6 +20,7 @@ import { DatabaseModule } from '@api/config';
       provide: 'IProductRepository',
       useClass: ProductRepository,
     },
+    { provide: 'IProductService', useClass: ProductService },
   ],
 })
 export class ProductModule {}
