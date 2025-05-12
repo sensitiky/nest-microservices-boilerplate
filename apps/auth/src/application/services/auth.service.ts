@@ -92,7 +92,7 @@ export class AuthService
       const decoded = this.jwtService.verify(refreshToken);
       const auth = await this.authRepository.findByUserId(decoded.userId);
 
-      if (!auth ?? auth.refreshToken !== refreshToken) {
+      if (auth.refreshToken !== refreshToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
