@@ -11,11 +11,11 @@ import { FastifyRequest } from 'fastify';
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly logger = new ConsoleLogger();
-  constructor(private jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = await context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const request = context.switchToHttp().getRequest();
+    const token = await this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException('No authorization token provided');
     }

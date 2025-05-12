@@ -28,7 +28,7 @@ import { AuthFactoryService } from './application/services/auth-factory.service'
           transport: Transport.TCP,
           options: {
             host: '0.0.0.0',
-            port: configService.get<number>('USER_TCP_PORT') || 4003,
+            port: configService.get<number>('USER_TCP_PORT') ?? 4003,
           },
         }),
       },

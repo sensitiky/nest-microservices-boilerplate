@@ -18,7 +18,7 @@ async function bootstrap() {
 
   await app.listen();
   logger.log(
-    `User microservice is running on port ${process.env.TCP_PORT || 4003}`,
+    `User microservice is running on port ${process.env.TCP_PORT ?? 4003}`,
   );
 }
 
