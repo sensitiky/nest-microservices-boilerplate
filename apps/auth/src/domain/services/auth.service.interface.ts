@@ -1,13 +1,13 @@
-import { Auth } from '../entities/auth.entity';
-
-export interface IAuthService {
-  login(credentials: { email: string; password: string }): Promise<Auth>;
-  register(userData: {
-    email: string;
-    password: string;
-    name: string;
-  }): Promise<Auth>;
-  validateToken(token: string): Promise<boolean>;
-  refreshToken(refreshToken: string): Promise<Auth>;
+export interface IAuthExecuter<Response, Credentials = void> {
+  login(credentials: Credentials): Promise<Response>;
   logout(userId: string): Promise<void>;
+}
+
+export interface IAuthRegister<Response, UserData = void> {
+  register(userData: UserData): Promise<Response>;
+}
+
+export interface IAuthTokenizer<Token, Result = boolean | object> {
+  validateToken(token: Token): Promise<Result>;
+  refreshToken(refreshToken: Token): Promise<Result>;
 }
