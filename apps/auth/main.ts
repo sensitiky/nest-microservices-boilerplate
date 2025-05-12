@@ -18,7 +18,7 @@ async function bootstrap() {
 
   await app.listen();
   logger.log(
-    `Auth microservice is running on port ${process.env.TCP_PORT || 4001}`,
+    `Auth microservice is running on port ${process.env.TCP_PORT ?? 4001}`,
   );
 }
 

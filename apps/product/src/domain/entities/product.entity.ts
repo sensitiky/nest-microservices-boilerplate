@@ -21,7 +21,7 @@ export class Product {
     this.description = params.description;
     this.price = params.price;
     this.stock = params.stock;
-    this.createdAt = params.createdAt || new Date();
-    this.updatedAt = params.updatedAt || new Date();
+    this.createdAt = params.createdAt ?? new Date();
+    this.updatedAt = params.updatedAt ?? new Date();
   }
 }

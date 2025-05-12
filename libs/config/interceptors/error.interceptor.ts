@@ -13,7 +13,7 @@ export class ErrorInterceptor implements NestInterceptor {
       catchError((error) => {
         const request = context.switchToHttp().getRequest();
         const errorResponse = {
-          message: error.message || 'An unexpected error occurred',
+          message: error.message ?? 'An unexpected error occurred',
           timestamp: new Date().toISOString(),
           path: request.url,
         };

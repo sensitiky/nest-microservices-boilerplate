@@ -2,14 +2,24 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Auth } from '../../domain/entities/auth.entity';
 import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
-import { IAuthService } from '../../domain/services/auth.service.interface';
+import {
+  IAuthExecuter,
+  IAuthRegister,
+  IAuthTokenizer,
+} from '../../domain/services/auth.service.interface';
 import * as bcrypt from 'bcryptjs';
 import { catchError, firstValueFrom, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { ClientProxy } from '@nestjs/microservices';
+import { LoginDto, RegisterDto } from '@api/common';
 
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthService
+  implements
+    IAuthExecuter<Auth, LoginDto>,
+    IAuthRegister<Auth, RegisterDto>,
+    IAuthTokenizer<string, boolean | Auth>
+{
   constructor(
     @Inject('IAuthRepository')
     private readonly authRepository: IAuthRepository,
@@ -18,7 +28,7 @@ export class AuthService implements IAuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(credentials: { email: string; password: string }): Promise<Auth> {
+  async login(credentials: LoginDto): Promise<Auth> {
     const user = await firstValueFrom(
       this.userRepository.send('get-user-by-email', credentials.email),
     );
@@ -37,11 +47,7 @@ export class AuthService implements IAuthService {
     return this.generateTokens(user.id);
   }
 
-  async register(userData: {
-    email: string;
-    password: string;
-    name: string;
-  }): Promise<Auth> {
+  async register(userData: RegisterDto): Promise<Auth> {
     try {
       const existingUser = await firstValueFrom(
         this.userRepository
@@ -74,8 +80,8 @@ export class AuthService implements IAuthService {
 
   async validateToken(token: string): Promise<boolean> {
     try {
-      const decoded = this.jwtService.verify(token);
-      return !!decoded;
+      const decoded = await this.jwtService.verifyAsync(token);
+      return decoded;
     } catch {
       return false;
     }
@@ -86,7 +92,7 @@ export class AuthService implements IAuthService {
       const decoded = this.jwtService.verify(refreshToken);
       const auth = await this.authRepository.findByUserId(decoded.userId);
 
-      if (!auth || auth.refreshToken !== refreshToken) {
+      if (auth.refreshToken !== refreshToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 

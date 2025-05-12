@@ -21,7 +21,7 @@ export class Auth {
     this.accessToken = params.accessToken;
     this.refreshToken = params.refreshToken;
     this.expiresAt = params.expiresAt;
-    this.createdAt = params.createdAt || new Date();
-    this.updatedAt = params.updatedAt || new Date();
+    this.createdAt = params.createdAt ?? new Date();
+    this.updatedAt = params.updatedAt ?? new Date();
   }
 }

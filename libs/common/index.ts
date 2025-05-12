@@ -8,3 +8,6 @@ export * from './entities/auth.entity';
 export * from './dto/auth.dto';
 export * from './dto/product.dto';
 export * from './dto/user.dto';
+
+// Export enums
+export * from './enums/auth.enums';

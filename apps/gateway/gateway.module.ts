@@ -25,7 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
           transport: Transport.TCP,
           options: {
             host: '0.0.0.0',
-            port: configService.get('AUTH_TCP_PORT') || 4001,
+            port: configService.get('AUTH_TCP_PORT') ?? 4001,
           },
         }),
       },
@@ -37,7 +37,7 @@ import { JwtModule } from '@nestjs/jwt';
           transport: Transport.TCP,
           options: {
             host: '0.0.0.0',
-            port: configService.get('PRODUCT_TCP_PORT') || 4002,
+            port: configService.get('PRODUCT_TCP_PORT') ?? 4002,
           },
         }),
       },
@@ -49,7 +49,7 @@ import { JwtModule } from '@nestjs/jwt';
           transport: Transport.TCP,
           options: {
             host: '0.0.0.0',
-            port: configService.get('USER_TCP_PORT') || 4003,
+            port: configService.get('USER_TCP_PORT') ?? 4003,
           },
         }),
       },

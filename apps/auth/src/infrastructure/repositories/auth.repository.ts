@@ -15,14 +15,14 @@ export class AuthRepository implements IAuthRepository {
     const authEntity = await this.authRepository.findOne({
       where: { id },
     });
-    return authEntity ? authEntity : null;
+    return authEntity;
   }
 
   async findByUserId(userId: string): Promise<Auth> {
     const authEntity = await this.authRepository.findOne({
       where: { userId },
     });
-    return authEntity ? authEntity : null;
+    return authEntity;
   }
 
   async create(auth: Auth): Promise<Auth> {

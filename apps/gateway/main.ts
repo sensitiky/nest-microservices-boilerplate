@@ -62,7 +62,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TransformInterceptor(), new ErrorInterceptor());
 
-  const port = configService.get<string>('PORT') || 3000;
+  const port = configService.get<string>('PORT') ?? 3000;
   await app.listen(port, '0.0.0.0');
   logger.log(`Gateway running on port ${port}`);
   logger.log(
