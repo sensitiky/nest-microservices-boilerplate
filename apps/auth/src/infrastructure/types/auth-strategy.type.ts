@@ -1,14 +1,9 @@
 import { Auth, LoginDto, RegisterDto } from '@api/common';
 import {
+  EmailService,
   IAuthExecuter,
-  IAuthRegister,
-  IAuthTokenizer,
-} from '../../domain/services/auth.service.interface';
+} from '../../application/ports/in/auth.service.interface';
 
-export type AuthStrategy = EmailStrategy & OtpStrategy;
-
-type EmailStrategy = IAuthExecuter<Auth, LoginDto> &
-  IAuthRegister<Auth, RegisterDto> &
-  IAuthTokenizer<string, boolean | Auth>;
+export type AuthStrategy = EmailService & OtpStrategy;
 
 type OtpStrategy = IAuthExecuter<Auth, LoginDto>;

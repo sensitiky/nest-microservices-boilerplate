@@ -1,12 +1,13 @@
 import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Product } from '../../domain/entities/product.entity';
-import { IProductService } from '../../domain/services/product.service.interface';
+import { IProductService } from '../../application/port/in/product.service.interface';
+import { ProductServiceSymbol } from '../../domain/symbols/product.symbol';
 
 @Controller()
 export class ProductController {
   constructor(
-    @Inject('IProductService')
+    @Inject(ProductServiceSymbol)
     private readonly productService: IProductService,
   ) {}
 

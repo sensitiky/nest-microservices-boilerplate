@@ -1,12 +1,13 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from '../../domain/entities/product.entity';
-import { IProductRepository } from '../../domain/repositories/product.repository.interface';
-import { IProductService } from '../../domain/services/product.service.interface';
+import { IProductRepository } from '../port/out/product.repository.interface';
+import { IProductService } from '../port/in/product.service.interface';
+import { ProductRepositorySymbol } from '../../domain/symbols/product.symbol';
 
 @Injectable()
 export class ProductService implements IProductService {
   constructor(
-    @Inject('IProductRepository')
+    @Inject(ProductRepositorySymbol)
     private readonly productRepository: IProductRepository,
   ) {}
 

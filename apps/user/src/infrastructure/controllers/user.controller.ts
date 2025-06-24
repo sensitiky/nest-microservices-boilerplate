@@ -1,11 +1,16 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserService } from '../../application/services/user.service';
 import { UserDomain } from '../../domain/entities/user.entity';
+import { UserServiceSymbol } from '../../domain/symbols/user.symbol';
+import { IUserService } from '../../application/port/in/user.service.interface';
 
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    @Inject(UserServiceSymbol)
+    private readonly userService: IUserService,
+  ) {}
 
   @MessagePattern('get-all-users')
   async getAllUsers() {

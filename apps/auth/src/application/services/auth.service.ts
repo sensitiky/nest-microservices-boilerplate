@@ -1,27 +1,19 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Auth } from '../../domain/entities/auth.entity';
-import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
-import {
-  IAuthExecuter,
-  IAuthRegister,
-  IAuthTokenizer,
-} from '../../domain/services/auth.service.interface';
+import { IAuthRepository } from '../ports/out/auth.repository.interface';
+import { EmailService } from '../ports/in/auth.service.interface';
 import * as bcrypt from 'bcryptjs';
 import { catchError, firstValueFrom, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { ClientProxy } from '@nestjs/microservices';
 import { LoginDto, RegisterDto } from '@api/common';
+import { AuthRepositorySymbol } from '../../domain/symbols/auth.symbol';
 
 @Injectable()
-export class AuthService
-  implements
-    IAuthExecuter<Auth, LoginDto>,
-    IAuthRegister<Auth, RegisterDto>,
-    IAuthTokenizer<string, boolean | Auth>
-{
+export class AuthService implements EmailService {
   constructor(
-    @Inject('IAuthRepository')
+    @Inject(AuthRepositorySymbol)
     private readonly authRepository: IAuthRepository,
     @Inject('USER_SERVICE')
     private readonly userRepository: ClientProxy,
