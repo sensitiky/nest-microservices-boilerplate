@@ -1,4 +1,4 @@
-import { Auth, LoginDto, RegisterDto } from '@api/common';
+import { Auth, LoginDto } from '@api/common';
 import {
   EmailService,
   IAuthExecuter,
