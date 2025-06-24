@@ -7,15 +7,16 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserDomain } from '../../domain/entities/user.entity';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
-import { IUserService } from '../../domain/services/user.service.interface';
+import { IUserService } from '../port/in/user.service.interface';
+import { IUserRepository } from '../port/out/user.repository.interface';
+import { UserRepositorySymbol } from '../../domain/symbols/user.symbol';
 
 @Injectable()
 export class UserService implements IUserService {
   private readonly logger = new ConsoleLogger('UserService');
 
   constructor(
-    @Inject('IUserRepository')
+    @Inject(UserRepositorySymbol)
     private readonly userRepository: IUserRepository,
     private readonly jwtService: JwtService,
   ) {}

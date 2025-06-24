@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IAuthRepository } from '../../domain/repositories/auth.repository.interface';
+import { IAuthRepository } from '../../application/ports/out/auth.repository.interface';
 import { Auth } from '@api/common';
 
 @Injectable()

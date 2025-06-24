@@ -6,6 +6,10 @@ import { ProductRepository } from './infrastructure/repositories/product.reposit
 import { ProductController } from './infrastructure/controllers/product.controller';
 import { ProductEntity } from './infrastructure/entities/product.entity';
 import { DatabaseModule } from '@api/config';
+import {
+  ProductRepositorySymbol,
+  ProductServiceSymbol,
+} from './domain/symbols/product.symbol';
 
 @Module({
   imports: [
@@ -15,12 +19,11 @@ import { DatabaseModule } from '@api/config';
   ],
   controllers: [ProductController],
   providers: [
-    ProductService,
     {
-      provide: 'IProductRepository',
+      provide: ProductRepositorySymbol,
       useClass: ProductRepository,
     },
-    { provide: 'IProductService', useClass: ProductService },
+    { provide: ProductServiceSymbol, useClass: ProductService },
   ],
 })
 export class ProductModule {}

@@ -7,6 +7,10 @@ import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { DatabaseModule } from '@api/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthFactoryService } from './application/services/auth-factory.service';
+import {
+  AuthRepositorySymbol,
+  AuthServiceSymbol,
+} from './domain/symbols/auth.symbol';
 
 @Module({
   imports: [
@@ -37,13 +41,12 @@ import { AuthFactoryService } from './application/services/auth-factory.service'
   ],
   controllers: [AuthController],
   providers: [
-    AuthService,
     AuthFactoryService,
     {
-      provide: 'IAuthRepository',
+      provide: AuthRepositorySymbol,
       useClass: AuthRepository,
     },
-    { provide: 'IAuthService', useClass: AuthService },
+    { provide: AuthServiceSymbol, useClass: AuthService },
   ],
 })
 export class AuthModule {}
