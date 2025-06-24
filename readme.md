@@ -11,12 +11,13 @@ This project follows a microservices architecture with a hexagonal design patter
 - **Domain Layer**: Contains business logic, entities, and interfaces (ports)
 
   - Entities: Core business objects
-  - Repositories: Interfaces for data access
-  - Services: Interfaces for business operations
+  - Symbols: Track token for dependency runtime injection
 
 - **Application Layer**: Implements use cases using domain entities
 
   - Services: Implements business logic using domain interfaces
+  - Port/in: Interfaces for data access
+  - Port/out: Interfaces for business operations
 
 - **Infrastructure Layer**: Provides implementations for interfaces defined in the domain layer
   - Controllers: Handles incoming requests
