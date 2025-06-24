@@ -7,6 +7,10 @@ import { UserController } from './infrastructure/controllers/user.controller';
 import { UserEntity } from './infrastructure/entities/user.entity';
 import { UserRepository } from './infrastructure/repositories/user.repository';
 import { DatabaseModule } from '@api/config';
+import {
+  UserRepositorySymbol,
+  UserServiceSymbol,
+} from './domain/symbols/user.symbol';
 
 @Module({
   imports: [
@@ -24,10 +28,13 @@ import { DatabaseModule } from '@api/config';
   ],
   controllers: [UserController],
   providers: [
-    UserService,
     {
-      provide: 'IUserRepository',
+      provide: UserRepositorySymbol,
       useClass: UserRepository,
+    },
+    {
+      provide: UserServiceSymbol,
+      useClass: UserService,
     },
   ],
 })

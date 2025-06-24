@@ -1,4 +1,4 @@
-import { UserDomain } from '../entities/user.entity';
+import { UserDomain } from '../../../domain/entities/user.entity';
 
 export interface IUserService {
   getAllUsers(): Promise<UserDomain[]>;

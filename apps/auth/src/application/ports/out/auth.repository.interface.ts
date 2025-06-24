@@ -1,4 +1,4 @@
-import { Auth } from '../entities/auth.entity';
+import { Auth } from '../../../domain/entities/auth.entity';
 
 export interface IAuthRepository {
   findById(id: string): Promise<Auth>;
