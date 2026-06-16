@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User, Product, Auth } from '@api/common';
-
-const postgresEntities = [User, Product, Auth];
 
 @Module({
   imports: [
@@ -18,13 +15,11 @@ const postgresEntities = [User, Product, Auth];
         database: configService.get<string>('DB_NAME'),
         password: configService.get<string>('DB_PASSWORD'),
         port: configService.get<number>('DB_PORT'),
-        entities: postgresEntities,
-        synchronize: true,
+        autoLoadEntities: true,
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
         logging: false,
-        logger: 'advanced-console',
       }),
     }),
-    TypeOrmModule.forFeature(postgresEntities, 'postgresConnection'),
   ],
   exports: [TypeOrmModule],
 })

@@ -1,2 +1,1 @@
-export const UserServiceSymbol = Symbol('IUserService');
-export const UserRepositorySymbol = Symbol('IUserRepositor');
+export const UserRepositorySymbol = Symbol('IUserRepository');

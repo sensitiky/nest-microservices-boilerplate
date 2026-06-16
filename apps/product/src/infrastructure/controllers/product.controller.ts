@@ -1,40 +1,51 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { Product } from '../../domain/entities/product.entity';
-import { IProductService } from '../../application/port/in/product.service.interface';
-import { ProductServiceSymbol } from '../../domain/symbols/product.symbol';
+import { CreateProductUseCase } from '../../application/use-cases/create-product/create-product.use-case';
+import { GetProductByIdUseCase } from '../../application/use-cases/get-product-by-id/get-product-by-id.use-case';
+import { GetAllProductsUseCase } from '../../application/use-cases/get-all-products/get-all-products.use-case';
+import { UpdateProductUseCase } from '../../application/use-cases/update-product/update-product.use-case';
+import { DeleteProductUseCase } from '../../application/use-cases/delete-product/delete-product.use-case';
+import { CreateProductCommand } from '../../application/use-cases/create-product/create-product.command';
+import { UpdateProductCommand } from '../../application/use-cases/update-product/update-product.command';
 
 @Controller()
 export class ProductController {
   constructor(
-    @Inject(ProductServiceSymbol)
-    private readonly productService: IProductService,
+    private readonly createProduct: CreateProductUseCase,
+    private readonly getProductById: GetProductByIdUseCase,
+    private readonly getAllProducts: GetAllProductsUseCase,
+    private readonly updateProduct: UpdateProductUseCase,
+    private readonly deleteProduct: DeleteProductUseCase,
   ) {}
 
-  @MessagePattern('get-all-products')
-  async getAllProducts() {
-    return await this.productService.getAllProducts();
+  @MessagePattern('create-product')
+  async handleCreateProduct(@Payload() command: CreateProductCommand) {
+    const product = await this.createProduct.execute(command);
+    return product.toSnapshot();
   }
 
   @MessagePattern('get-product-by-id')
-  async getProductById(@Payload() id: string) {
-    return await this.productService.getProductById(id);
+  async handleGetProductById(@Payload() id: string) {
+    const product = await this.getProductById.execute(id);
+    return product.toSnapshot();
   }
 
-  @MessagePattern('create-product')
-  async createProduct(@Payload() product: Product) {
-    return await this.productService.createProduct(product);
+  @MessagePattern('get-all-products')
+  async handleGetAllProducts() {
+    const products = await this.getAllProducts.execute();
+    return products.map((p) => p.toSnapshot());
   }
 
   @MessagePattern('update-product')
-  async updateProduct(
-    @Payload() payload: { id: string; product: Partial<Product> },
+  async handleUpdateProduct(
+    @Payload() payload: { id: string; product: Omit<UpdateProductCommand, 'id'> },
   ) {
-    return await this.productService.updateProduct(payload.id, payload.product);
+    const product = await this.updateProduct.execute({ id: payload.id, ...payload.product });
+    return product.toSnapshot();
   }
 
   @MessagePattern('delete-product')
-  async deleteProduct(@Payload() id: string) {
-    return await this.productService.deleteProduct(id);
+  async handleDeleteProduct(@Payload() id: string) {
+    await this.deleteProduct.execute(id);
   }
 }
