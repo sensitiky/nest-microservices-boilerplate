@@ -42,7 +42,7 @@ COPY apps/product/package.json ./apps/product/
 COPY --from=builder /app/dist ./dist
 
 # Install production dependencies only
-RUN bun install --production
+RUN bun install && bun install --production
 
 # Set environment variables
 ENV NODE_ENV=production
