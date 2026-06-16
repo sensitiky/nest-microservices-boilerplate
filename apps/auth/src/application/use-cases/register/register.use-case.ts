@@ -22,11 +22,20 @@ export class RegisterUseCase {
       password: command.password,
     });
 
-    const accessToken = this.tokenGenerator.generateAccessToken(userSnapshot.id);
-    const refreshToken = this.tokenGenerator.generateRefreshToken(userSnapshot.id);
+    const accessToken = this.tokenGenerator.generateAccessToken(
+      userSnapshot.id,
+    );
+    const refreshToken = this.tokenGenerator.generateRefreshToken(
+      userSnapshot.id,
+    );
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
-    const session = AuthSession.create({ userId: userSnapshot.id, accessToken, refreshToken, expiresAt });
+    const session = AuthSession.create({
+      userId: userSnapshot.id,
+      accessToken,
+      refreshToken,
+      expiresAt,
+    });
     await this.authSessionRepo.save(session);
     return session;
   }

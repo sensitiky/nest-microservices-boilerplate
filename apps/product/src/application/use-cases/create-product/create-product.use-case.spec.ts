@@ -18,14 +18,24 @@ describe('CreateProductUseCase', () => {
   });
 
   it('creates product and returns snapshot-able product', async () => {
-    const product = await useCase.execute({ name: 'Widget', description: 'Desc', price: 9.99, stock: 10 });
+    const product = await useCase.execute({
+      name: 'Widget',
+      description: 'Desc',
+      price: 9.99,
+      stock: 10,
+    });
     expect(mockRepo.save).toHaveBeenCalledTimes(1);
     expect(product.name).toBe('Widget');
   });
 
   it('throws InvalidPriceException for negative price', async () => {
     await expect(
-      useCase.execute({ name: 'Widget', description: 'Desc', price: -1, stock: 10 }),
+      useCase.execute({
+        name: 'Widget',
+        description: 'Desc',
+        price: -1,
+        stock: 10,
+      }),
     ).rejects.toThrow(InvalidPriceException);
   });
 });

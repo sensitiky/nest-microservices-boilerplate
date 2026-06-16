@@ -20,14 +20,20 @@ describe('DeleteUserUseCase', () => {
   });
 
   it('deletes user when found', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'p' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'p',
+    });
     mockRepo.findById = mock(async () => user);
     await useCase.execute(user.id);
     expect(mockRepo.delete).toHaveBeenCalledWith(user.id);
   });
 
   it('throws UserNotFoundException when not found', async () => {
-    await expect(useCase.execute('missing')).rejects.toThrow(UserNotFoundException);
+    await expect(useCase.execute('missing')).rejects.toThrow(
+      UserNotFoundException,
+    );
     expect(mockRepo.delete).not.toHaveBeenCalled();
   });
 });

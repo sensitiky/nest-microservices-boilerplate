@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateUserUseCase } from '../../application/use-cases/create-user/create-user.use-case';
 import { GetUserByIdUseCase } from '../../application/use-cases/get-user-by-id/get-user-by-id.use-case';
@@ -46,8 +46,13 @@ export class UserController {
   }
 
   @MessagePattern('update-user')
-  async handleUpdateUser(@Payload() payload: { id: string; user: Omit<UpdateUserCommand, 'id'> }) {
-    const user = await this.updateUser.execute({ id: payload.id, ...payload.user });
+  async handleUpdateUser(
+    @Payload() payload: { id: string; user: Omit<UpdateUserCommand, 'id'> },
+  ) {
+    const user = await this.updateUser.execute({
+      id: payload.id,
+      ...payload.user,
+    });
     return user.toSafeSnapshot();
   }
 

@@ -45,11 +45,18 @@ describe('LoginUseCase', () => {
       decodeToken: mock(() => ({ userId: 'user-1' })),
     };
 
-    useCase = new LoginUseCase(mockAuthRepo, mockUserClient, mockTokenGenerator);
+    useCase = new LoginUseCase(
+      mockAuthRepo,
+      mockUserClient,
+      mockTokenGenerator,
+    );
   });
 
   it('returns auth session on valid credentials', async () => {
-    const session = await useCase.execute({ email: 'alice@example.com', password: 'correct-password' });
+    const session = await useCase.execute({
+      email: 'alice@example.com',
+      password: 'correct-password',
+    });
     expect(session.accessToken).toBe('access-token');
     expect(session.userId).toBe('user-1');
     expect(mockAuthRepo.save).toHaveBeenCalledTimes(1);
@@ -64,7 +71,10 @@ describe('LoginUseCase', () => {
 
   it('throws InvalidCredentialsException when password is wrong', async () => {
     await expect(
-      useCase.execute({ email: 'alice@example.com', password: 'wrong-password' }),
+      useCase.execute({
+        email: 'alice@example.com',
+        password: 'wrong-password',
+      }),
     ).rejects.toThrow(InvalidCredentialsException);
   });
 });

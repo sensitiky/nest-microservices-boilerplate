@@ -8,7 +8,8 @@ export class StockCount {
   }
 
   static create(value: number): StockCount {
-    if (!Number.isInteger(value) || value < 0) throw new InvalidStockException(value);
+    if (!Number.isInteger(value) || value < 0)
+      throw new InvalidStockException(value);
     return new StockCount(value);
   }
 

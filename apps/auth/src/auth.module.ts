@@ -53,20 +53,37 @@ import { ITokenGenerator } from './domain/ports/out/token-generator.port';
   ],
   controllers: [AuthController],
   providers: [
-    { provide: AuthSessionRepositorySymbol, useClass: AuthSessionTypeOrmRepository },
+    {
+      provide: AuthSessionRepositorySymbol,
+      useClass: AuthSessionTypeOrmRepository,
+    },
     { provide: UserServiceClientSymbol, useClass: TcpUserServiceClient },
     { provide: TokenGeneratorSymbol, useClass: JwtTokenGenerator },
     {
       provide: LoginUseCase,
-      useFactory: (repo: IAuthSessionRepository, client: IUserServiceClient, gen: ITokenGenerator) =>
-        new LoginUseCase(repo, client, gen),
-      inject: [AuthSessionRepositorySymbol, UserServiceClientSymbol, TokenGeneratorSymbol],
+      useFactory: (
+        repo: IAuthSessionRepository,
+        client: IUserServiceClient,
+        gen: ITokenGenerator,
+      ) => new LoginUseCase(repo, client, gen),
+      inject: [
+        AuthSessionRepositorySymbol,
+        UserServiceClientSymbol,
+        TokenGeneratorSymbol,
+      ],
     },
     {
       provide: RegisterUseCase,
-      useFactory: (repo: IAuthSessionRepository, client: IUserServiceClient, gen: ITokenGenerator) =>
-        new RegisterUseCase(repo, client, gen),
-      inject: [AuthSessionRepositorySymbol, UserServiceClientSymbol, TokenGeneratorSymbol],
+      useFactory: (
+        repo: IAuthSessionRepository,
+        client: IUserServiceClient,
+        gen: ITokenGenerator,
+      ) => new RegisterUseCase(repo, client, gen),
+      inject: [
+        AuthSessionRepositorySymbol,
+        UserServiceClientSymbol,
+        TokenGeneratorSymbol,
+      ],
     },
     {
       provide: ValidateTokenUseCase,

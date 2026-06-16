@@ -33,7 +33,9 @@ export class Product {
       new Date(),
       new Date(),
     );
-    product._domainEvents.push(new ProductCreatedEvent(product._id, props.name));
+    product._domainEvents.push(
+      new ProductCreatedEvent(product._id, props.name),
+    );
     return product;
   }
 
@@ -49,7 +51,14 @@ export class Product {
     );
   }
 
-  update(props: Partial<{ name: string; description: string; price: number; stock: number }>): void {
+  update(
+    props: Partial<{
+      name: string;
+      description: string;
+      price: number;
+      stock: number;
+    }>,
+  ): void {
     if (props.name !== undefined) this._name = props.name;
     if (props.description !== undefined) this._description = props.description;
     if (props.price !== undefined) this._price = Money.create(props.price);
@@ -75,11 +84,25 @@ export class Product {
     return events;
   }
 
-  get id(): string { return this._id; }
-  get name(): string { return this._name; }
-  get description(): string { return this._description; }
-  get price(): Money { return this._price; }
-  get stock(): StockCount { return this._stock; }
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
+  get id(): string {
+    return this._id;
+  }
+  get name(): string {
+    return this._name;
+  }
+  get description(): string {
+    return this._description;
+  }
+  get price(): Money {
+    return this._price;
+  }
+  get stock(): StockCount {
+    return this._stock;
+  }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
 }

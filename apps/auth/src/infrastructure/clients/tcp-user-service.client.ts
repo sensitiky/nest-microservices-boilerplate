@@ -3,7 +3,10 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { catchError, of } from 'rxjs';
 import { UserSnapshot } from '@api/common';
-import { IUserServiceClient, CreateUserData } from '../../domain/ports/out/user-service-client.port';
+import {
+  IUserServiceClient,
+  CreateUserData,
+} from '../../domain/ports/out/user-service-client.port';
 
 @Injectable()
 export class TcpUserServiceClient implements IUserServiceClient {
@@ -14,7 +17,9 @@ export class TcpUserServiceClient implements IUserServiceClient {
 
   async findByEmail(email: string): Promise<UserSnapshot | null> {
     return firstValueFrom(
-      this.client.send('get-user-by-email', email).pipe(catchError(() => of(null))),
+      this.client
+        .send('get-user-by-email', email)
+        .pipe(catchError(() => of(null))),
     );
   }
 

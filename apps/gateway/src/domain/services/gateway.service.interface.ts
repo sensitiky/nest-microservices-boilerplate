@@ -1,6 +1,10 @@
 import { LoginDto, RegisterDto, AuthResponseDto } from '../dtos/auth.dto';
 import { UserDto, UpdateUserDto } from '../dtos/user.dto';
-import { ProductDto, CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
+import {
+  ProductDto,
+  CreateProductDto,
+  UpdateProductDto,
+} from '../dtos/product.dto';
 
 export interface IGatewayService {
   login(credentials: LoginDto): Promise<AuthResponseDto>;

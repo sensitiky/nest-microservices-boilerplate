@@ -19,14 +19,21 @@ describe('DeleteProductUseCase', () => {
   });
 
   it('deletes product when found', async () => {
-    const product = Product.create({ name: 'W', description: 'D', price: 1, stock: 1 });
+    const product = Product.create({
+      name: 'W',
+      description: 'D',
+      price: 1,
+      stock: 1,
+    });
     mockRepo.findById = mock(async () => product);
     await useCase.execute(product.id);
     expect(mockRepo.delete).toHaveBeenCalledWith(product.id);
   });
 
   it('throws ProductNotFoundException and does not delete when not found', async () => {
-    await expect(useCase.execute('missing')).rejects.toThrow(ProductNotFoundException);
+    await expect(useCase.execute('missing')).rejects.toThrow(
+      ProductNotFoundException,
+    );
     expect(mockRepo.delete).not.toHaveBeenCalled();
   });
 });

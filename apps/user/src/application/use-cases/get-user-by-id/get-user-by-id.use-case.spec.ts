@@ -20,13 +20,19 @@ describe('GetUserByIdUseCase', () => {
   });
 
   it('returns user when found', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'p' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'p',
+    });
     mockRepo.findById = mock(async () => user);
     const result = await useCase.execute('some-id');
     expect(result).toBe(user);
   });
 
   it('throws UserNotFoundException when not found', async () => {
-    await expect(useCase.execute('missing')).rejects.toThrow(UserNotFoundException);
+    await expect(useCase.execute('missing')).rejects.toThrow(
+      UserNotFoundException,
+    );
   });
 });

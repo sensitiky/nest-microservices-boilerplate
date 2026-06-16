@@ -152,7 +152,10 @@ export class GatewayController {
   @ApiBearerAuth('access-token')
   @Put('products/:id')
   @UseGuards(AuthGuard)
-  async updateProduct(@Param('id') id: string, @Body() product: UpdateProductDto) {
+  async updateProduct(
+    @Param('id') id: string,
+    @Body() product: UpdateProductDto,
+  ) {
     return await this.gatewayService.updateProduct(id, product);
   }
 

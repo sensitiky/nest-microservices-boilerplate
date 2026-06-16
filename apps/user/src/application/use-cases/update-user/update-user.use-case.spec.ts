@@ -20,7 +20,11 @@ describe('UpdateUserUseCase', () => {
   });
 
   it('updates user name and saves', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'p' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'p',
+    });
     mockRepo.findById = mock(async () => user);
     const result = await useCase.execute({ id: user.id, name: 'Bob' });
     expect(result.name).toBe('Bob');
@@ -28,6 +32,8 @@ describe('UpdateUserUseCase', () => {
   });
 
   it('throws UserNotFoundException when not found', async () => {
-    await expect(useCase.execute({ id: 'missing', name: 'Bob' })).rejects.toThrow(UserNotFoundException);
+    await expect(
+      useCase.execute({ id: 'missing', name: 'Bob' }),
+    ).rejects.toThrow(UserNotFoundException);
   });
 });

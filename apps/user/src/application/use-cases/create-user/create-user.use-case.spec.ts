@@ -3,7 +3,6 @@ import { CreateUserUseCase } from './create-user.use-case';
 import { IUserRepository } from '../../../domain/ports/out/user.repository.port';
 import { UserAlreadyExistsException } from '../../../domain/exceptions/user-already-exists.exception';
 import { User } from '../../../domain/aggregates/user.aggregate';
-import { Email } from '../../../domain/value-objects/email.vo';
 
 describe('CreateUserUseCase', () => {
   let useCase: CreateUserUseCase;
@@ -21,15 +20,27 @@ describe('CreateUserUseCase', () => {
   });
 
   it('creates user when email is not taken', async () => {
-    await useCase.execute({ name: 'Alice', email: 'alice@example.com', password: 'pass123' });
+    await useCase.execute({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'pass123',
+    });
     expect(mockRepo.save).toHaveBeenCalledTimes(1);
   });
 
   it('throws UserAlreadyExistsException when email is taken', async () => {
-    const existing = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'p' });
+    const existing = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'p',
+    });
     mockRepo.findByEmail = mock(async () => existing);
     await expect(
-      useCase.execute({ name: 'Bob', email: 'alice@example.com', password: 'pass' }),
+      useCase.execute({
+        name: 'Bob',
+        email: 'alice@example.com',
+        password: 'pass',
+      }),
     ).rejects.toThrow(UserAlreadyExistsException);
     expect(mockRepo.save).not.toHaveBeenCalled();
   });

@@ -20,10 +20,16 @@ describe('AuthSession aggregate', () => {
     const session = AuthSession.create(props);
     const before = session.updatedAt;
     await new Promise((r) => setTimeout(r, 10));
-    session.refresh('new.access', 'new.refresh', new Date(Date.now() + 3600000));
+    session.refresh(
+      'new.access',
+      'new.refresh',
+      new Date(Date.now() + 3600000),
+    );
     expect(session.accessToken).toBe('new.access');
     expect(session.refreshToken).toBe('new.refresh');
-    expect(session.updatedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
+    expect(session.updatedAt.getTime()).toBeGreaterThanOrEqual(
+      before.getTime(),
+    );
   });
 
   it('reconstitutes from snapshot', () => {

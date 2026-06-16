@@ -4,7 +4,11 @@ import { InvalidEmailException } from '../exceptions/invalid-email.exception';
 
 describe('User aggregate', () => {
   it('creates user with hashed password and emits UserCreatedEvent', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'pass123' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'pass123',
+    });
     expect(user.id).toBeTruthy();
     expect(user.email.value).toBe('alice@example.com');
     expect(user.name).toBe('Alice');
@@ -15,11 +19,17 @@ describe('User aggregate', () => {
   });
 
   it('throws InvalidEmailException for invalid email', async () => {
-    await expect(User.create({ name: 'Alice', email: 'bad', password: 'pass' })).rejects.toThrow(InvalidEmailException);
+    await expect(
+      User.create({ name: 'Alice', email: 'bad', password: 'pass' }),
+    ).rejects.toThrow(InvalidEmailException);
   });
 
   it('updates name and avatar', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'pass123' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'pass123',
+    });
     user.update({ name: 'Bob', avatar: 'http://img.com/a.jpg' });
     expect(user.name).toBe('Bob');
     expect(user.avatar).toBe('http://img.com/a.jpg');
@@ -41,7 +51,11 @@ describe('User aggregate', () => {
   });
 
   it('toSafeSnapshot excludes password', async () => {
-    const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'pass123' });
+    const user = await User.create({
+      name: 'Alice',
+      email: 'alice@example.com',
+      password: 'pass123',
+    });
     const snap = user.toSafeSnapshot();
     expect('hashedPassword' in snap).toBe(false);
     expect(snap.email).toBe('alice@example.com');

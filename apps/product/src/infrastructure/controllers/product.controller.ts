@@ -38,9 +38,16 @@ export class ProductController {
 
   @MessagePattern('update-product')
   async handleUpdateProduct(
-    @Payload() payload: { id: string; product: Omit<UpdateProductCommand, 'id'> },
+    @Payload()
+    payload: {
+      id: string;
+      product: Omit<UpdateProductCommand, 'id'>;
+    },
   ) {
-    const product = await this.updateProduct.execute({ id: payload.id, ...payload.product });
+    const product = await this.updateProduct.execute({
+      id: payload.id,
+      ...payload.product,
+    });
     return product.toSnapshot();
   }
 

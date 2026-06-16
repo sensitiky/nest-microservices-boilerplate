@@ -61,11 +61,25 @@ export class AuthSession {
     };
   }
 
-  get id(): string { return this._id; }
-  get userId(): string { return this._userId; }
-  get accessToken(): string { return this._accessToken; }
-  get refreshToken(): string { return this._refreshToken; }
-  get expiresAt(): Date { return this._expiresAt; }
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
+  get id(): string {
+    return this._id;
+  }
+  get userId(): string {
+    return this._userId;
+  }
+  get accessToken(): string {
+    return this._accessToken;
+  }
+  get refreshToken(): string {
+    return this._refreshToken;
+  }
+  get expiresAt(): Date {
+    return this._expiresAt;
+  }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
 }

@@ -21,8 +21,12 @@ export class LoginUseCase {
     const isValid = await password.compare(command.password);
     if (!isValid) throw new InvalidCredentialsException();
 
-    const accessToken = this.tokenGenerator.generateAccessToken(userSnapshot.id);
-    const refreshToken = this.tokenGenerator.generateRefreshToken(userSnapshot.id);
+    const accessToken = this.tokenGenerator.generateAccessToken(
+      userSnapshot.id,
+    );
+    const refreshToken = this.tokenGenerator.generateRefreshToken(
+      userSnapshot.id,
+    );
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
     const existing = await this.authSessionRepo.findByUserId(userSnapshot.id);
@@ -32,7 +36,12 @@ export class LoginUseCase {
       return existing;
     }
 
-    const session = AuthSession.create({ userId: userSnapshot.id, accessToken, refreshToken, expiresAt });
+    const session = AuthSession.create({
+      userId: userSnapshot.id,
+      accessToken,
+      refreshToken,
+      expiresAt,
+    });
     await this.authSessionRepo.save(session);
     return session;
   }

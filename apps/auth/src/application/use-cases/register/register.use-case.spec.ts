@@ -41,11 +41,19 @@ describe('RegisterUseCase', () => {
       decodeToken: mock(() => ({ userId: 'user-2' })),
     };
 
-    useCase = new RegisterUseCase(mockAuthRepo, mockUserClient, mockTokenGenerator);
+    useCase = new RegisterUseCase(
+      mockAuthRepo,
+      mockUserClient,
+      mockTokenGenerator,
+    );
   });
 
   it('creates user and returns auth session', async () => {
-    const session = await useCase.execute({ name: 'Bob', email: 'bob@example.com', password: 'pass123' });
+    const session = await useCase.execute({
+      name: 'Bob',
+      email: 'bob@example.com',
+      password: 'pass123',
+    });
     expect(session.userId).toBe('user-2');
     expect(session.accessToken).toBe('access-token');
     expect(mockUserClient.create).toHaveBeenCalledTimes(1);
@@ -55,7 +63,11 @@ describe('RegisterUseCase', () => {
   it('throws UserAlreadyExistsException when email is taken', async () => {
     mockUserClient.findByEmail = mock(async () => newUserSnapshot);
     await expect(
-      useCase.execute({ name: 'Bob', email: 'bob@example.com', password: 'pass' }),
+      useCase.execute({
+        name: 'Bob',
+        email: 'bob@example.com',
+        password: 'pass',
+      }),
     ).rejects.toThrow(UserAlreadyExistsException);
     expect(mockUserClient.create).not.toHaveBeenCalled();
   });

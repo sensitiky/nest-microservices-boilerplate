@@ -9,7 +9,9 @@ export class CreateUserUseCase {
   constructor(private readonly userRepo: IUserRepository) {}
 
   async execute(command: CreateUserCommand): Promise<UserSnapshot> {
-    const existing = await this.userRepo.findByEmail(Email.create(command.email));
+    const existing = await this.userRepo.findByEmail(
+      Email.create(command.email),
+    );
     if (existing) throw new UserAlreadyExistsException(command.email);
     const user = await User.create(command);
     await this.userRepo.save(user);
